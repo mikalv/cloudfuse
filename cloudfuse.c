@@ -14,6 +14,7 @@
 #include <signal.h>
 #include <stdint.h>
 #include <stddef.h>
+#include "mime_types.h"
 #include "cloudfsapi.h"
 #include "config.h"
 
