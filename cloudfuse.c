@@ -290,9 +290,9 @@ static int cfs_open(const char *path, struct fuse_file_info *info)
 {
   FILE *temp_file = tmpfile();
   dir_entry *de = path_info(path);
-  if (!(info->flags & O_WRONLY))
+  if (!(info->flags & O_TRUNC))
   {
-    if (!cloudfs_object_write_fp(path, temp_file))
+    if (!cloudfs_object_write_fp(path, temp_file) && !(info->flags & O_CREAT))
     {
       fclose(temp_file);
       return -ENOENT;
@@ -305,6 +305,7 @@ static int cfs_open(const char *path, struct fuse_file_info *info)
   of->flags = info->flags;
   info->fh = (uintptr_t)of;
   info->direct_io = 1;
+  info->nonseekable = 1; // requires fuse>=2.8
   return 0;
 }
 
